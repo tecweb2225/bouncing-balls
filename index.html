@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bouncing Balls</title>
+</head>
+<body>
+    <canvas id="areaDibujo">
+
+    </canvas>
+
+    <script>
+        var areaDibujo = document.getElementById('areaDibujo')
+        var contexto = areaDibujo.getContext('2d')
+        var ancho = areaDibujo.width = window.innerWidth
+        var alto = areaDibujo.height = window.innerHeight
+        var pelotas = []
+        ciclo()
+
+        function aleatorio(min, max)    
+        {
+            var num = Math.floor( Math.random() * (max - min + 1) ) + min
+            return num
+        }
+
+        function Pelota()
+        {
+            this.x = aleatorio(0, ancho)
+            this.y = aleatorio(0, alto)
+            this.velX = aleatorio(-7, 7)
+            this.velY = aleatorio(-7, 7)
+            this.color = 'rgb(' + aleatorio(0, 255) + 
+                        ',' + aleatorio(0, 255) + 
+                        ',' + aleatorio(0, 255) + ')'
+            this.tam = aleatorio(10, 20)
+            this.dibujate = function ()   {
+                contexto.beginPath()
+                contexto.fillStyle = this.color
+                contexto.arc(this.x, this.y, this.tam, 0, 2 * Math.PI)
+                contexto.fill()
+            }
+            this.muevete = function()   {
+                if ((this.x + this.tam) >= ancho)   {
+                    this.velX = -this.velX 
+                }
+                if ((this.x - this.tam) <= 0) {
+                    this.velX = -this.velX 
+                }
+                if ((this.y + this.tam) >= alto)  {
+                    this.velY = -this.velY
+                }
+                if ((this.y - this.tam) <= 0) {
+                    this.velY = -this.velY
+                }
+                this.x += this.velX
+                this.y += this.velY
+            }
+        }
+        function ciclo()    
+        {
+            contexto.fillStyle = 'rgba(0, 0, 0, 0.25)'
+            contexto.fillRect(0, 0, ancho, alto)
+
+            while(pelotas.length < 10)  {
+                var pelota = new Pelota()
+                pelotas.push(pelota)
+            }
+            for (var i in pelotas)  {
+                pelotas[i].dibujate()
+                pelotas[i].muevete()
+            }
+            requestAnimationFrame(ciclo)
+        }
+    </script>
+</body>
+</html>
